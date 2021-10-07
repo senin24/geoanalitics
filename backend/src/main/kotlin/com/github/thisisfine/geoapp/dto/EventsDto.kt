@@ -10,7 +10,7 @@ data class EventsDto(
 ) {
     data class Event(
         @JsonProperty("id", required = true)
-        val id: Int,
+        val id: String,
         @JsonProperty("type", required = true)
         val type: String,
         @JsonProperty("source", required = true)
@@ -30,13 +30,13 @@ data class EventsDto(
         @JsonProperty("importance", required = true)
         val importance: Int = 1,
         @JsonProperty("links", required = false)
-        val links: List<Int>?
+        val links: List<String>?
     ) {
         data class Address(
             @JsonProperty("region", required = false)
             val region: String?,
-            @JsonProperty("place", required = true)
-            val palce: String,
+            @JsonProperty("place", required = false)
+            val palce: String?,
             @JsonProperty("street", required = false)
             val street: String?,
             @JsonProperty("city", required = false)

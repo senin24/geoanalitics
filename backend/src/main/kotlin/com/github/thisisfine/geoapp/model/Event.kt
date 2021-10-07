@@ -2,6 +2,7 @@ package com.github.thisisfine.geoapp.model
 
 import org.hibernate.annotations.Type
 import org.locationtech.jts.geom.Point
+import java.math.BigDecimal
 import java.time.Instant
 import javax.persistence.*
 
@@ -9,20 +10,19 @@ import javax.persistence.*
 @Table(name = "events", schema = "geo_app_schema")
 data class Event (
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     val id: Long,
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, length = 255)
     val type: String,
 
-    @Column(name = "source", nullable = false)
+    @Column(name = "source", nullable = false, length = 255)
     val source: String,
 
     @Column(name = "date")
     val date: Instant,
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, length = 255)
     val title: String,
 
     @Column(name = "text", nullable = false, length = 1000)
@@ -32,25 +32,31 @@ data class Event (
     val special: Boolean = false,
 
     @Column(name = "x")
-    val x: Int?,
+    val x: BigDecimal?,
 
     @Column(name = "y")
-    val y: Int?,
+    val y: BigDecimal?,
 
-    @Type(type = "org.hibernate.spatial.JTSGeometryType")
+    @Type(type = "org.locationtech.jts.geom.Point")
     @Column(name = "geom", columnDefinition = "Geometry")
     val geom: Point?,
 
     @Column(name = "importance", nullable = false)
-    val importance: Int = 1,
+    val importance: BigDecimal = BigDecimal.ONE,
 
-    @Column(name = "region")
+    @Column(name = "region", length = 255)
     val region: String?,
 
-    @Column(name = "city")
-    val city: String?,
+    @Column(name = "place", length = 255)
+    val place: String?,
 
-    //TOD
+    @Column(name = "street", length = 255)
+    val street: String?,
+
+    @Column(name = "building", length = 255)
+    val building: String?,
+
     @Column(name = "links", length = 1000)
-    val links: String?,
+    @Convert(converter = SetConverter::class)
+    val links: Set<String>?,
 )
