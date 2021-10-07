@@ -1,4 +1,5 @@
 {
+  "proxy": "https://geoanalitics.herokuapp.com/",
   "name": "geoanalitics",
   "version": "0.1.0",
   "private": true,

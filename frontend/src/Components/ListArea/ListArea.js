@@ -17,12 +17,11 @@ function ListArea(props) {
 
     return (
         <div className={classes.container}>
-            <Filter/>
+            <Filter data={features}/>
             <List>
                 {
                     features.map((item) => (
                         <ListItem
-                            dense
                             onClick={_setActiveItem(item)}
                             selected={_isActive(item)}
                             key={item.properties.id}>

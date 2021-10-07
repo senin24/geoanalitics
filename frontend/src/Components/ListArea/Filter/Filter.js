@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import useStyles from "./style";
 import {Accordion, AccordionSummary, AccordionDetails, Typography, Select, MenuItem} from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -6,6 +6,26 @@ import DateFnsUtils from "@date-io/date-fns";
 
 function Filter(props) {
     const classes = useStyles();
+    const {data} = props;
+
+    const [sourceData, setSourceData] = useState(null);
+
+    const [typeData, setTypeData] = useState(null);
+
+    useEffect(() => {
+        const source = new Set();
+        const type = new Set();
+        data.forEach((item) => {
+            source.add(item.properties.source);
+            type.add(item.properties.type);
+        });
+        setSourceData(Array.from(source));
+        setTypeData(Array.from(type));
+    },[])
+
+    if (!sourceData || !typeData) {
+        return null;
+    }
 
     return (
         <div className={classes.container}>
@@ -14,7 +34,7 @@ function Filter(props) {
                     <Typography>Фильтр</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div className={classes.date}>
+                    <div className={classes.filtersContainer}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 autoOk
@@ -24,15 +44,26 @@ function Filter(props) {
                                 format="MM.dd.yyyy"
                             />
                         </MuiPickersUtilsProvider>
-                        <Select variant="outlined"
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                        </Select>
+                        <div className={classes.selectFilters}>
+                            <div className={classes.sourceFilter}>
+                                <Select variant="outlined" value={sourceData[0]}>
+                                    {
+                                        sourceData.map((item) => (
+                                            <MenuItem value={item}>{item}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </div>
+                            <div className={classes.typeFilter}>
+                                <Select variant="outlined" value={typeData[0]}>
+                                    {
+                                        typeData.map((item) => (
+                                            <MenuItem value={item}>{item}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </div>
+                        </div>
                     </div>
                 </AccordionDetails>
             </Accordion>
