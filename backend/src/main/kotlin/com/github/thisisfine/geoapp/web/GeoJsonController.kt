@@ -24,7 +24,7 @@ class GeoJsonController(
         return "forward:/"
     }
 
-    @PostMapping("/", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    @PostMapping("/saveFileEventsToDb", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @Operation(
         summary = "Upload file"
     )
@@ -71,9 +71,9 @@ class GeoJsonController(
     fun getEventsByTypeAndSource(type: String, source: String): FeatureCollection =
         geoJsonService.getEventsByTypeAndSource(type, source)
 
-    @PostMapping
+    @PostMapping("/saveEventsDtoToDb")
     @Operation(summary = "Save Events Json to DB")
-    fun saveRxEventsDtoToDb(@RequestBody eventsDto: EventsDto){
+    fun saveEventsDtoToDb(@RequestBody eventsDto: EventsDto){
         uploadService.saveEventDtoToDb(eventsDto)
     }
 }
