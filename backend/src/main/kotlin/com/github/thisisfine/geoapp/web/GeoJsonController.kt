@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 
 @RestController
-@RequestMapping("/api/bank")
+@RequestMapping("/api/event")
 class GeoJsonController(
 ) {
 
