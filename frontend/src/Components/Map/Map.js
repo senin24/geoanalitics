@@ -2,8 +2,9 @@ import React from "react";
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import useStyles from "./style";
 
-function Map() {
+function Map({activeItem}) {
   const classes = useStyles();
+  console.log(activeItem);
   return (
     <div className={classes.container}>
       <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} className={classes.containerMap}>
