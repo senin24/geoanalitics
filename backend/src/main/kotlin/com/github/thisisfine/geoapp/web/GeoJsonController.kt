@@ -1,5 +1,6 @@
 package com.github.thisisfine.geoapp.web
 
+import com.github.thisisfine.geoapp.dto.EventsDto
 import com.github.thisisfine.geoapp.service.GeoJsonService
 import com.github.thisisfine.geoapp.model.UploadService
 import io.swagger.v3.oas.annotations.Operation
@@ -52,5 +53,9 @@ class GeoJsonController(
             ?.let { feature -> ResponseEntity.ok(feature) }
             ?: ResponseEntity.notFound().build()
 
-
+    @PostMapping("/")
+    @Operation(summary = "Save Rx Json to db")
+    fun saveRxEventsDtoToDb(@RequestBody eventsDto: EventsDto){
+        uploadService.saveEventDtoToDb(eventsDto)
+    }
 }
