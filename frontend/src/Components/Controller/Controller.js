@@ -6,18 +6,32 @@ import useStyles from "./style";
 
 function Controller() {
     const classes = useStyles();
-    const [activeItem, setActiveItem] = useState(null);
 
+    const [activeItem, setActiveItem] = useState(null);
     const [data, setData] = useState(null);
+    const [filter, setFilter] = useState({source: '', type: '', startDate:'', endDate:''});
 
     const _getData = async () => {
-        const data = await serviceJson('/api/event', 'GET');
+        const data = await serviceJson('/api/event');
         setData(data);
     };
+
+    const _getFilterData = async () => {
+        const data = await serviceJson('/api/event/filterByType', filter);
+        // setData(data);
+    };
+
+    const _setFilter = (newFilter) => {
+        setFilter({...filter, ...newFilter});
+    }
 
     useEffect(() => {
         void _getData();
     },[]);
+
+    useEffect(() => {
+        void _getFilterData();
+    }, [filter]);
 
     if (!data) {
         return (
@@ -29,7 +43,13 @@ function Controller() {
 
     return (
         <>
-            <ListArea setActiveItem={setActiveItem} activeItem={activeItem} data={data}/>
+            <ListArea
+                setActiveItem={setActiveItem}
+                activeItem={activeItem}
+                data={data}
+                setFilter={_setFilter}
+                filter={filter}
+            />
             <Map activeItem={activeItem} data={data}/>
         </>
     )

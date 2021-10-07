@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from "react";
 import useStyles from "./style";
-import {Accordion, AccordionSummary, AccordionDetails, Typography, Select, MenuItem} from '@material-ui/core';
+import {Accordion, AccordionSummary, AccordionDetails, Typography, Select, MenuItem, InputLabel} from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import ruLocale from "date-fns/locale/ru";
 
 function Filter(props) {
     const classes = useStyles();
-    const {data} = props;
+    const {data,setFilter, filter} = props;
 
     const [sourceData, setSourceData] = useState(null);
-
     const [typeData, setTypeData] = useState(null);
 
     useEffect(() => {
@@ -23,6 +22,19 @@ function Filter(props) {
         setSourceData(Array.from(source));
         setTypeData(Array.from(type));
     },[])
+
+    const _onChangeSource = async (event) => {
+        setFilter({source: event.target.value})
+    }
+
+    const _onChangeType = async (event) => {
+        setFilter({type: event.target.value})
+    }
+
+    const _onChangeDate = async (date) => {
+        const value = new Date(date).toISOString();
+        setFilter({startDate: value, endDate: value});
+    }
 
     if (!sourceData || !typeData) {
         return null;
@@ -38,16 +50,16 @@ function Filter(props) {
                     <div className={classes.filtersContainer}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
                             <KeyboardDatePicker
-                                autoOk
-                                variant="inline"
                                 inputVariant="outlined"
                                 label="Дата события"
-                                format="MM.dd.yyyy"
+                                format="dd MMM yyyy"
+                                value={filter.startDate || null}
+                                onChange={_onChangeDate}
                             />
                         </MuiPickersUtilsProvider>
                         <div className={classes.selectFilters}>
                             <div className={classes.sourceFilter}>
-                                <Select variant="outlined" value={sourceData[0]}>
+                                <Select variant="outlined" value={filter.source} onChange={_onChangeSource}>
                                     {
                                         sourceData.map((item) => (
                                             <MenuItem value={item} key={item}>{item}</MenuItem>
@@ -56,7 +68,7 @@ function Filter(props) {
                                 </Select>
                             </div>
                             <div className={classes.typeFilter}>
-                                <Select variant="outlined" value={typeData[0]}>
+                                <Select variant="outlined" value={filter.type} onChange={_onChangeType}>
                                     {
                                         typeData.map((item) => (
                                             <MenuItem value={item} key={item}>{item}</MenuItem>

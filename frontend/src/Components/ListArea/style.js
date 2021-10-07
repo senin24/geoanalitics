@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
     fontSize: '14px',
     height: '500px',
-    overflow: 'auto'
+    overflow: 'auto',
+    scrollBehavior: 'smooth'
   },
   eventItem: {
     cursor: 'pointer',
@@ -32,7 +33,16 @@ const useStyles = makeStyles((theme) => ({
   },
   linkItem: {
     fontSize: '10px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    textDecoration: 'underline'
+  },
+  linkItemContainer:{
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '5px'
+  },
+  eventItemText: {
+    fontSize: '12px'
   }
 }));
 

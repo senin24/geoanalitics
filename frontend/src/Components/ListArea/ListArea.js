@@ -1,12 +1,20 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import useStyles from "./style";
 import {List, ListItem, ListItemText} from '@material-ui/core';
 import StarsIcon from '@material-ui/icons/Stars';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Filter from "./Filter/Filter";
 
 function ListArea(props) {
     const classes = useStyles();
-    const {setActiveItem, activeItem, data: {features}} = props;
+    const {setActiveItem, activeItem, data: {features}, setFilter, filter} = props;
+
+    useEffect(() => {
+        if (activeItem) {
+            const element = document.getElementById(activeItem.properties.id);
+            element.scrollIntoView();
+        }
+    },[activeItem]);
 
     const _isActive = (item) => {
         return item.properties.id === (activeItem && activeItem.properties.id);
@@ -27,8 +35,11 @@ function ListArea(props) {
         });
         return dataLinks.map((linkItem, index) => {
             return (
-                <div className={classes.linkItem} onClick={_setActiveItem(linkItem)} key={index}>
-                    {linkItem.properties.text}
+                <div className={classes.linkItemContainer} key={index}>
+                    <ChevronRightIcon color={'primary'}/>
+                    <div className={classes.linkItem} onClick={_setActiveItem(linkItem)}>
+                        {linkItem.properties.title}
+                    </div>
                 </div>
             )
         })
@@ -36,7 +47,7 @@ function ListArea(props) {
 
     return (
         <div className={classes.container}>
-            <Filter data={features}/>
+            <Filter data={features} setFilter={setFilter} filter={filter}/>
             <List>
                 {
                     features.map((item) => {
@@ -47,8 +58,9 @@ function ListArea(props) {
                                 onClick={_setActiveItem(item)}
                                 selected={_isActive(item)}
                                 key={currentData.id}>
-                                <div className={classes.itemsContainer}>
-                                    <ListItemText primary={<div className={classes.eventItem}>{currentData.text}</div>}/>
+                                <div className={classes.itemsContainer} id={currentData.id}>
+                                    <ListItemText primary={<div className={classes.eventItem}>{currentData.title}</div>}/>
+                                    <div className={classes.eventItemText}>{currentData.text}</div>
                                     {
                                         currentData.links ? _getLinksItem(currentData.links) : null
                                     }
