@@ -1,21 +1,21 @@
-import React, {useEffect} from "react";
-import {MapContainer, TileLayer, GeoJSON, Marker, Popup, LayersControl, ZoomControl } from 'react-leaflet';
+import React, {useEffect, useState} from "react";
+import {MapContainer, TileLayer, LayerGroup, LayersControl, ZoomControl } from 'react-leaflet';
 import useStyles from "./style";
 import GeoJSONLayer from "./GeoJSONLayer";
 import L from 'leaflet';
+import HeatLayer from './HeatmapLayer';
 
 
 /**
  * @return {null}
  */
 
-let map;
-
 function Map(props) {
   const classes = useStyles();
   const {data, activeItem, setActiveItem} = props;
+  const [map, setMap] = useState(null);
   const createMapContext = (mapContext) => {
-    map = mapContext;
+    setMap(mapContext);
   };
 
   useEffect(() => {
@@ -50,6 +50,11 @@ function Map(props) {
           </LayersControl.BaseLayer>
           <LayersControl.Overlay checked name={'События'}>
             <GeoJSONLayer data={data} activeItem={activeItem} setActiveItem={setActiveItem}/>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay checked name={'Тепловая карта'}>
+            <LayerGroup>
+              <HeatLayer data={data} map={map}/>
+            </LayerGroup>
           </LayersControl.Overlay>
         </LayersControl>
         <ZoomControl position='topright'/>
