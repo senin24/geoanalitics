@@ -21,7 +21,7 @@ function GeoJSONLayer(props) {
     })});
   return(
     <GeoJSON data={geojson} pointToLayer={marker} onEachFeature={(feature, layer) => {
-      layer.bindPopup(feature.properties.text);
+      layer.bindPopup(feature.properties.title);
     }} eventHandlers={{
       popupopen: (event) => {
         const foundFeature = data.features.find((feature) => {

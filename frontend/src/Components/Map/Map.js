@@ -23,7 +23,7 @@ function Map(props) {
     map.flyTo([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]], 13);
     const popup = L.popup()
       .setLatLng([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]])
-      .setContent(activeItem.properties.text)
+      .setContent(activeItem.properties.title)
       .openOn(map);
   }, [activeItem]);
   return (
