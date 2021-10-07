@@ -29,7 +29,7 @@ data class EventsDto(
         @JsonProperty("coordinates")
         val coordinates: Coordinates?,
         @JsonProperty("importance")
-        val importance: Int = 1,
+        val importance: Double = 1.0,
         @JsonProperty("links", required = false)
         val links: List<String>?
     ) {
