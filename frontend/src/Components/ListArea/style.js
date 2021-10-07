@@ -10,9 +10,28 @@ const useStyles = makeStyles((theme) => ({
     top: '10px',
     left: '10px',
     zIndex: 2,
-    fontSize: '14px'
+    fontSize: '14px',
+    height: '500px',
+    overflow: 'auto'
   },
   eventItem: {
+    cursor: 'pointer',
+    fontSize: '14px'
+  },
+  iconSpecial: {
+    marginLeft: '5px',
+    display: 'flex'
+  },
+  item: {
+    borderTop: '1px solid #80808038'
+  },
+  itemsContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  linkItem: {
+    fontSize: '10px',
     cursor: 'pointer'
   }
 }));
