@@ -3,6 +3,7 @@ import useStyles from "./style";
 import {Accordion, AccordionSummary, AccordionDetails, Typography, Select, MenuItem} from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import ruLocale from "date-fns/locale/ru";
 
 function Filter(props) {
     const classes = useStyles();
@@ -35,7 +36,7 @@ function Filter(props) {
                 </AccordionSummary>
                 <AccordionDetails>
                     <div className={classes.filtersContainer}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
                             <KeyboardDatePicker
                                 autoOk
                                 variant="inline"
