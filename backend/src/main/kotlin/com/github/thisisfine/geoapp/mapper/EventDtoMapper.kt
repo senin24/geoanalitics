@@ -26,8 +26,7 @@ class EventDtoMapper()
             region = event.region,
             place = event.place,
             street = event.street,
-            building = event.building,
-            shortAddress = "${event.region},${event.place},${event.street} ${event.building}"
+            building = event.building
         )
     }
 

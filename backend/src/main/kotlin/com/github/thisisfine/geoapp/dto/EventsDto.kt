@@ -41,8 +41,6 @@ data class EventsDto(
             val street: String?,
             @JsonProperty("city", required = false)
             val building: String?,
-            @JsonProperty("shortAddress", required = false)
-            val shortAddress: String?,
         )
 
         data class Coordinates(

@@ -30,13 +30,13 @@ class UploadService(
 
     fun uploadJsontoPostGis(file: MultipartFile) {
 
-        val eventsFromJson = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
+        val eventsDtoFromJson = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
 
-        val geocodedEvents: List<Event> = eventsFromJson.events
+        val geocodedEvents: List<Event> = eventsDtoFromJson.events
             .mapNotNull { eventDto ->
-                val geocode: GeocodeData = geocoder(eventDto.address?.shortAddress) ?: return@mapNotNull null
+                val geocode: GeocodeData = geocoder(getAddress(eventDto)) ?: return@mapNotNull null
                 Event(
-                    id = eventDto.id.toLong(),
+                    id = eventDto.id,
                     type = eventDto.type,
                     source = eventDto.source,
                     date = Instant.parse(eventDto.date),
@@ -85,3 +85,13 @@ data class GeocodeData(
     val longitude: BigDecimal,
     val addressGeocoded: String
 )
+
+fun getAddress(eventDto: EventsDto.Event): String? {
+    val streetAddress =
+        listOfNotNull(eventDto.address?.street, eventDto.address?.building).joinToString(separator = ", ")
+    return listOfNotNull(
+        eventDto.address?.region,
+        eventDto.address?.place,
+        streetAddress
+    ).joinToString(separator = ", ")
+}
