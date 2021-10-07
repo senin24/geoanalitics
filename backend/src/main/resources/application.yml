@@ -22,7 +22,7 @@ spring:
     database: postgresql
 
   datasource:
-    url: ${PSQL_URL:jdbc:postgresql://ec2-176-34-105-15.eu-west-1.compute.amazonaws.com:5432/d3o956q2732u61}
+    url: ${PSQL_URL:jdbc:postgresql://ec2-54-73-152-36.eu-west-1.compute.amazonaws.com:5432/d7uv04cjai8hro}
     username: ${PSQL_USER}
     password: ${PSQL_PASSWORD}
     type: com.zaxxer.hikari.HikariDataSource
