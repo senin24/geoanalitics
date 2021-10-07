@@ -25,7 +25,7 @@ function ListArea(props) {
                             onClick={_setActiveItem(item)}
                             selected={_isActive(item)}
                             key={item.properties.id}>
-                            <ListItemText primary={item.properties.text} />
+                            <ListItemText primary={<div className={classes.eventItem}>{item.properties.text}</div>} />
                         </ListItem>
                     ))
                 }
