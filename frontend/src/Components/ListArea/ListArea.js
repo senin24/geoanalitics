@@ -1,8 +1,6 @@
 import React from "react";
 import useStyles from "./style";
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
+import {List, ListItem, ListItemText} from '@material-ui/core';
 import Filter from "./Filter/Filter";
 
 function ListArea(props) {
@@ -23,13 +21,13 @@ function ListArea(props) {
             <List>
                 {
                     features.map((item) => (
-                        <ListItemButton
+                        <ListItem
                             dense
                             onClick={_setActiveItem(item)}
                             selected={_isActive(item)}
                             key={item.properties.id}>
                             <ListItemText primary={item.properties.text} />
-                        </ListItemButton>
+                        </ListItem>
                     ))
                 }
             </List>
