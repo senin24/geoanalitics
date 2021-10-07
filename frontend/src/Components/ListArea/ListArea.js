@@ -78,11 +78,9 @@ function ListArea(props) {
             <List>
                 {
                     FAKE_DATA.map((item) => (
-                        <ListItem key={item.id}>
-                            <ListItemButton onClick={_setActiveItem(item)} selected={_isActive(item)}>
-                                <ListItemText primary={item.text} />
-                            </ListItemButton>
-                        </ListItem>
+                        <ListItemButton onClick={_setActiveItem(item)} selected={_isActive(item)} key={item.id}>
+                            <ListItemText primary={item.text} />
+                        </ListItemButton>
                     ))
                 }
             </List>
