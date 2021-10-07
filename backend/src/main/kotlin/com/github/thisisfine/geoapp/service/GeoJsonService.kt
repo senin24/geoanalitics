@@ -66,5 +66,35 @@ class GeoJsonService(
             )
         )
 
+    fun getEventsByType(type: String): FeatureCollection =
+        eventRepository.findAllByType(type)
+            .map { event -> mapToFeature(event) }
+            .toList()
+            .let { eventFeatures ->
+                FeatureCollection(
+                    features = eventFeatures
+                )
+            }
+
+    fun getEventsBySource(source: String): FeatureCollection =
+        eventRepository.findAllBySource(source)
+            .map { event -> mapToFeature(event) }
+            .toList()
+            .let { eventFeatures ->
+                FeatureCollection(
+                    features = eventFeatures
+                )
+            }
+
+    fun getEventsByTypeAndSource(type: String, source: String): FeatureCollection =
+        eventRepository.findAllByTypeAndSource(type, source)
+            .map { event -> mapToFeature(event) }
+            .toList()
+            .let { eventFeatures ->
+                FeatureCollection(
+                    features = eventFeatures
+                )
+            }
+
 
 }

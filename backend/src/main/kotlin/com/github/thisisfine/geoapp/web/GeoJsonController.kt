@@ -42,15 +42,32 @@ class GeoJsonController(
 
     @GetMapping
     @Operation(summary = "Get all Events")
-    fun getAllBanks(): FeatureCollection = geoJsonService.getAllEvents()
+    fun getAllEvents(): FeatureCollection = geoJsonService.getAllEvents()
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get bank by code",
-        description = "http://localhost:8090/api/event/1")
-    fun getBankByCode(@PathVariable(name = "id") id: String): ResponseEntity<Feature> =
+    @Operation(
+        summary = "Get Event by code",
+        description = "http://localhost:8090/api/event/1"
+    )
+    fun getEventByCode(@PathVariable(name = "id") id: String): ResponseEntity<Feature> =
         geoJsonService.getEventById(id)
             ?.let { feature -> ResponseEntity.ok(feature) }
             ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/filterByType", params = ["type"])
+    @Operation(summary = "Get Events by Type", tags = ["filters"])
+    fun getEventsByType(type: String): FeatureCollection =
+        geoJsonService.getEventsByType(type)
+
+    @GetMapping("/filterBySource", params = ["source"])
+    @Operation(summary = "Get Events by Source", tags = ["filters"])
+    fun getEventsBySource(source: String): FeatureCollection =
+        geoJsonService.getEventsBySource(source)
+
+    @GetMapping("/filterByTypeAndSource", params = ["type", "source"])
+    @Operation(summary = "Get Events by Type an Source", tags = ["filters"])
+    fun getEventsByTypeAndSource(type: String, source: String): FeatureCollection =
+        geoJsonService.getEventsByTypeAndSource(type, source)
 
 
 }
