@@ -4,12 +4,14 @@ import com.github.thisisfine.geoapp.model.Event
 import com.github.thisisfine.geoapp.model.EventRepository
 import com.github.thisisfine.geoapp.web.Feature
 import com.github.thisisfine.geoapp.web.FeatureCollection
+import liquibase.pro.packaged.cb
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import java.time.ZoneOffset
-
+import java.time.Instant
 import java.time.ZoneId
-
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import javax.persistence.criteria.Predicate
 
 
 @Service
@@ -21,17 +23,6 @@ class GeoJsonService(
         val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
             .withZone(ZoneId.from(ZoneOffset.UTC))
     }
-
-
-    fun getAllEvents(): FeatureCollection =
-        eventRepository.findAll()
-            .map { event -> mapToFeature(event) }
-            .toList()
-            .let { eventFeatures ->
-                FeatureCollection(
-                    features = eventFeatures
-                )
-            }
 
     fun getEventById(id: String): Feature? =
         eventRepository.findById(id)
@@ -66,28 +57,63 @@ class GeoJsonService(
             )
         )
 
-    fun getEventsByType(type: String): FeatureCollection =
-        eventRepository.findAllByType(type)
-            .map { event -> mapToFeature(event) }
-            .toList()
-            .let { eventFeatures ->
-                FeatureCollection(
-                    features = eventFeatures
+    fun getAllEventsByParams(type: String?, source: String?, startDate: String?, endDate: String?): FeatureCollection {
+
+        if (listOfNotNull(type, source, startDate, endDate).none { s -> s.isNotEmpty() }) {
+            return getFeatureCollectionFromEvents(eventRepository.findAll())
+        }
+
+        val spec: Specification<Event> = if (endDate == null || endDate.isEmpty()) {
+            val startDateInst: Instant? = startDate?.let { Instant.parse(it) }
+            getSpecificationEqual(type, source, startDateInst)
+        } else {
+            val startDateInst: Instant = Instant.parse(startDate)
+            val endDateInst: Instant = Instant.parse(endDate)
+            getSpecificationBetween(type, source, startDateInst, endDateInst)
+        }
+
+        return getFeatureCollectionFromEvents(eventRepository.findAll(spec))
+    }
+
+    private fun getSpecificationEqual(type: String?, source: String?, startDateInst: Instant?): Specification<Event> =
+        Specification.where(attributeEquals("type", type))
+            .and(attributeEquals("source", source))
+            .and(attributeEquals("date", startDateInst))
+
+    private fun getSpecificationBetween(
+        type: String?,
+        source: String?,
+        startDateInst: Instant,
+        endDateInst: Instant
+    ): Specification<Event> =
+        Specification.where(attributeEquals("type", type))
+            .and(attributeEquals("source", source))
+            .and(attributeBetween("date", startDateInst, endDateInst))
+
+    private fun <T> attributeEquals(attributeName: String, value: T?): Specification<Event> {
+        return Specification { root, query, criteriaBuilder ->
+            value?.let {
+                criteriaBuilder.equal(
+                    root.get<T>(attributeName),
+                    value
                 )
             }
+        }
+    }
 
-    fun getEventsBySource(source: String): FeatureCollection =
-        eventRepository.findAllBySource(source)
-            .map { event -> mapToFeature(event) }
-            .toList()
-            .let { eventFeatures ->
-                FeatureCollection(
-                    features = eventFeatures
-                )
-            }
+    private fun attributeBetween(
+        attributeName: String,
+        startDateInst: Instant,
+        endDateInst: Instant
+    ): Specification<Event> {
+        return Specification { root, query, criteriaBuilder ->
+            criteriaBuilder.between(root.get(attributeName), startDateInst, endDateInst)
+        }
+    }
 
-    fun getEventsByTypeAndSource(type: String, source: String): FeatureCollection =
-        eventRepository.findAllByTypeAndSource(type, source)
+
+    private fun getFeatureCollectionFromEvents(events: List<Event>): FeatureCollection =
+        events
             .map { event -> mapToFeature(event) }
             .toList()
             .let { eventFeatures ->
