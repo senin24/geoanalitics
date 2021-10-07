@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
     fontSize: '14px'
   },
+  eventItem: {
+    cursor: 'pointer'
+  }
 }));
 
 export default useStyles;
