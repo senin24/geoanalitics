@@ -1,9 +1,8 @@
 import React from "react";
 import useStyles from "./style";
-import {Accordion, AccordionSummary, AccordionDetails, Typography, TextField} from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import {DatePicker, LocalizationProvider} from '@mui/lab';
-import ruLocale from 'date-fns/locale/ru';
+import {Accordion, AccordionSummary, AccordionDetails, Typography, TextField} from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 function Filter(props) {
     const classes = useStyles();
@@ -15,15 +14,16 @@ function Filter(props) {
                     <Typography>Фильтр</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div>
-                        <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
-                            <DatePicker
-                                mask={'__.__.____'}
+                    <div className={classes.date}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                autoOk
+                                variant="inline"
+                                inputVariant="outlined"
                                 label="Дата события"
-                                onChange={() => {}}
-                                renderInput={(params) => <TextField fullWidth={true} {...params} />}
+                                format="MM.dd.yyyy"
                             />
-                        </LocalizationProvider>
+                        </MuiPickersUtilsProvider>
                     </div>
                 </AccordionDetails>
             </Accordion>
