@@ -1,7 +1,7 @@
 import React from "react";
-import Map from '../Map/Map';
 import useStyles from "./style";
 import {Switch, Route,} from "react-router-dom";
+import Controller from "../Controller/Controller";
 
 function App() {
   const classes = useStyles();
@@ -12,7 +12,7 @@ function App() {
           <div>About</div>
         </Route>
         <Route path="/">
-          <Map/>
+          <Controller/>
         </Route>
       </Switch>
     </div>
