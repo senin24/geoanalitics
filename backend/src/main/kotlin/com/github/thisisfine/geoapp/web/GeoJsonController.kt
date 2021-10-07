@@ -55,6 +55,7 @@ class GeoJsonController(
             ?.let { feature -> ResponseEntity.ok(feature) }
             ?: ResponseEntity.notFound().build()
 
+    @PostMapping
     @GetMapping("/filterByType", params = ["type"])
     @Operation(summary = "Get Events by Type", tags = ["filters"])
     fun getEventsByType(type: String): FeatureCollection =
