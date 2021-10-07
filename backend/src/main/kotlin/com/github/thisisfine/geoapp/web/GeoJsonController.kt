@@ -72,7 +72,7 @@ class GeoJsonController(
         geoJsonService.getEventsByTypeAndSource(type, source)
 
     @PostMapping
-    @Operation(summary = "Save Rx Json to db")
+    @Operation(summary = "Save Events Json to DB")
     fun saveRxEventsDtoToDb(@RequestBody eventsDto: EventsDto){
         uploadService.saveEventDtoToDb(eventsDto)
     }
