@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
   itemsContainer: {
     width: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    cursor: 'pointer'
   },
   linkItem: {
     fontSize: '10px',
