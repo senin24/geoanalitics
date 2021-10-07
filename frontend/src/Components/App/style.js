@@ -2,7 +2,8 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-
+    height: '100%',
+    width: '100%',
   }
 }));
 

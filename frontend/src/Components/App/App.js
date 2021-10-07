@@ -12,10 +12,7 @@ function App() {
           <div>About</div>
         </Route>
         <Route path="/">
-          <>
-            <div>We are work!!</div>
-            <Map/>
-          </>
+          <Map/>
         </Route>
       </Switch>
     </div>

@@ -6,7 +6,7 @@ function Map() {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} className={classes.containerMap}>
         <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
