@@ -10,7 +10,7 @@ function Map({activeItem}) {
       <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} className={classes.containerMap}>
         <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url="https://tile2.maps.2gis.com/tiles?z={z}&x={x}&y={y}&v=1"
         />
         <Marker position={[51.505, -0.09]}>
           <Popup>
