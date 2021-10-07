@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    padding: '10px 10px 0px 10px'
   },
   filtersContainer: {
     width: '100%',
