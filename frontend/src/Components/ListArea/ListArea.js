@@ -12,7 +12,7 @@ function ListArea(props) {
     useEffect(() => {
         if (activeItem) {
             const element = document.getElementById(activeItem.properties.id);
-            element.scrollIntoView();
+            element.scrollIntoView({block: "center"});
         }
     },[activeItem]);
 
