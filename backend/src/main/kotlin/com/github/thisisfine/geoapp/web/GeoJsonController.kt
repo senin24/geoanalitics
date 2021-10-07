@@ -1,8 +1,10 @@
 package com.github.thisisfine.geoapp.web
 
+import com.github.thisisfine.geoapp.service.GeoJsonService
 import com.github.thisisfine.geoapp.model.UploadService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
@@ -11,10 +13,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 @RestController
 @RequestMapping("/api/event")
 class GeoJsonController(
+    private val geoJsonService: GeoJsonService,
     private val uploadService: UploadService
 ) {
 
     @GetMapping(value = ["/{path:[^\\.]*}"])
+    @Operation(hidden = true)
     fun redirect(): String? {
         return "forward:/"
     }
@@ -35,6 +39,18 @@ class GeoJsonController(
         )
         return "redirect:/"
     }
+
+    @GetMapping
+    @Operation(summary = "Get all Events")
+    fun getAllBanks(): FeatureCollection = geoJsonService.getAllEvents()
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get bank by code",
+        description = "http://localhost:8090/api/event/1")
+    fun getBankByCode(@PathVariable(name = "id") id: String): ResponseEntity<Feature> =
+        geoJsonService.getEventById(id)
+            ?.let { feature -> ResponseEntity.ok(feature) }
+            ?: ResponseEntity.notFound().build()
 
 
 }
