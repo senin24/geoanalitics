@@ -6,7 +6,7 @@ import L from 'leaflet';
 import HeatLayer from './HeatmapLayer';
 
 
-function Map() {
+function Map(props) {
   const classes = useStyles();
   const {data, activeItem, setActiveItem} = props;
   const [map, setMap] = useState(null);
