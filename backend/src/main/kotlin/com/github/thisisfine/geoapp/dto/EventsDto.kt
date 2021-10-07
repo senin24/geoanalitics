@@ -9,34 +9,38 @@ data class EventsDto(
     val events: List<Event>
 ) {
     data class Event(
-        @JsonProperty("id")
+        @JsonProperty("id", required = true)
         val id: Int,
-        @JsonProperty("type")
+        @JsonProperty("type", required = true)
         val type: String,
-        @JsonProperty("source")
+        @JsonProperty("source", required = true)
         val source: String,
-        @JsonProperty("date")
+        @JsonProperty("date", required = true)
         val date: String,
-        @JsonProperty("title")
+        @JsonProperty("title", required = true)
         val title: String,
-        @JsonProperty("text")
+        @JsonProperty("text", required = true)
         val text: String,
-        @JsonProperty("special")
+        @JsonProperty("special", required = true)
         val special: Boolean = false,
-        @JsonProperty("address")
-        val address: Address,
-        @JsonProperty("coordinates")
-        val coordinates: Coordinates,
-        @JsonProperty("importance")
+        @JsonProperty("address", required = false)
+        val address: Address?,
+        @JsonProperty("coordinates", required = false)
+        val coordinates: Coordinates?,
+        @JsonProperty("importance", required = true)
         val importance: Int = 1,
-        @JsonProperty("links")
-        val links: List<Int>
+        @JsonProperty("links", required = false)
+        val links: List<Int>?
     ) {
         data class Address(
-            @JsonProperty("region")
-            val region: String,
-            @JsonProperty("city")
-            val city: String
+            @JsonProperty("region", required = false)
+            val region: String?,
+            @JsonProperty("place", required = true)
+            val palce: String,
+            @JsonProperty("street", required = false)
+            val street: String?,
+            @JsonProperty("city", required = false)
+            val building: String?,
         )
 
         data class Coordinates(
