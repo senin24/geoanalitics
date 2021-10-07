@@ -3,5 +3,70 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
+    <changeSet author="Pavel_Senin" id="init_table_events">
+        <createTable tableName="events">
+            <column name="id" type="BIGSERIAL">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="events_pkey"/>
+            </column>
+
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="text" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column defaultValueBoolean="false" name="special" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="x" type="INTEGER"/>
+            <column name="y" type="INTEGER"/>
+            <column name="geom" type="geometry(Point, 4326)"/>
+
+            <column name="importance" type="INTEGER" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="region" type="VARCHAR(255)"/>
+
+            <column name="city" type="VARCHAR(255)"/>
+
+<!--            TODO add separete table-->
+            <column name="links" type="VARCHAR(1000)"/>
+
+        </createTable>
+    </changeSet>
+
+<!--    <changeSet author="Pavel_Senin" id="init_table_links">-->
+<!--        <createTable tableName="links">-->
+<!--            <column name="id" type="BIGSERIAL">-->
+<!--                <constraints nullable="false" primaryKey="true" primaryKeyName="links_pkey"/>-->
+<!--            </column>-->
+
+<!--            <column name="ref_id" type="BIGSERIAL">-->
+<!--                <constraints nullable="false" unique="true"/>-->
+<!--            </column>-->
+
+<!--        </createTable>-->
+
+<!--        <addForeignKeyConstraint baseColumnNames="id"-->
+<!--                                 baseTableName="links"-->
+<!--                                 constraintName="events_links_id_fkey"-->
+<!--                                 onDelete="CASCADE" onUpdate="CASCADE"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 referencedTableName="events"/>-->
+<!--    </changeSet>-->
+
 
 </databaseChangeLog>
