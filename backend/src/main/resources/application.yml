@@ -1,0 +1,39 @@
+server:
+  port: 8090
+
+app:
+  key2Gis: ${KEY_2GIS}
+
+spring:
+  application:
+    name: this-is-fine-geo-app
+
+  #  sql:
+#    init:
+#      mode: always
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        default_schema: ${BD_SCHEMA:GEO_APP_SCHEMA}
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+
+  datasource:
+    url: ${PSQL_URL:jdbc:postgresql://ec2-176-34-105-15.eu-west-1.compute.amazonaws.com:5432/d3o956q2732u61}
+    username: ${PSQL_USER}
+    password: ${PSQL_PASSWORD}
+    type: com.zaxxer.hikari.HikariDataSource
+
+    hikari:
+      maximum-pool-size: ${BD_POOL_SIZE:5}
+      connection-timeout: 20000
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog_cumulative.xml
+    enabled: true
+    default-schema: ${BD_SCHEMA:GEO_APP_SCHEMA}
+    user: ${PSQL_USER}
+    password: ${PSQL_PASSWORD}
