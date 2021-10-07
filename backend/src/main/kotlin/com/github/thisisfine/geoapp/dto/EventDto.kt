@@ -12,6 +12,7 @@ class EventDto(
     val text: String?,
     val special: Boolean = false,
     val address: Address,
+    val coordinates: Coordinates,
     val importance: Long?,
     val links: List<Long> = emptyList(),
 ) {
