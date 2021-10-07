@@ -35,13 +35,12 @@ class UploadService(
     }
 
     fun uploadEvents(file: MultipartFile) {
-
-        df.timeZone = TimeZone.getTimeZone("UTC+3")
         val eventsDtoFromJson: EventsDto = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
         saveEventDtoToDb(eventsDtoFromJson)
     }
 
     fun saveEventDtoToDb(eventsDto: EventsDto) {
+        df.timeZone = TimeZone.getTimeZone("UTC+3")
         val geocodedEvents: List<Event> = eventsDto.events.mapNotNull { eventDto ->
             val geocode: GeocodeData = geocoder(eventDto)
             Event(

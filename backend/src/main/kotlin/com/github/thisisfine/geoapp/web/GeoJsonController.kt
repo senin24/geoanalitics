@@ -53,7 +53,7 @@ class GeoJsonController(
             ?.let { feature -> ResponseEntity.ok(feature) }
             ?: ResponseEntity.notFound().build()
 
-    @PostMapping("/")
+    @PostMapping
     @Operation(summary = "Save Rx Json to db")
     fun saveRxEventsDtoToDb(@RequestBody eventsDto: EventsDto){
         uploadService.saveEventDtoToDb(eventsDto)
