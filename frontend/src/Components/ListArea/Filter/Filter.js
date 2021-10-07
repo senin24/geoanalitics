@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import useStyles from "./style";
-import {Accordion, AccordionSummary, AccordionDetails, Typography, Select, MenuItem, InputLabel} from '@material-ui/core';
+import {Accordion, AccordionSummary, AccordionDetails, Typography, Select, MenuItem} from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import ruLocale from "date-fns/locale/ru";
