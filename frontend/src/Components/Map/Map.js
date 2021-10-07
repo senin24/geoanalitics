@@ -1,20 +1,12 @@
 import React, {useEffect} from "react";
 import {MapContainer, TileLayer, GeoJSON, Marker, Popup, LayersControl, ZoomControl } from 'react-leaflet';
 import useStyles from "./style";
-import { circleMarker } from 'leaflet';
+import GeoJSONLayer from "./GeoJSONLayer";
 
 
 /**
  * @return {null}
  */
-const MARKER_STYLE = {
-  radius: 8,
-  fillColor: "#ff7800",
-  color: "#000",
-  weight: 1,
-  opacity: 1,
-  fillOpacity: 0.8
-};
 
 let map;
 
@@ -25,9 +17,7 @@ function Map(props) {
   const createMapContext = (mapContext) => {
     map = mapContext;
   };
-  const marker = (feature, latlng) => {
-    return circleMarker(latlng, MARKER_STYLE)
-  };
+
   useEffect(() => {
     if (!activeItem) return;
     map.flyTo(activeItem.geometry.coordinates);
@@ -54,11 +44,10 @@ function Map(props) {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
           </LayersControl.BaseLayer>
+          <LayersControl.Overlay checked name={'События'}>
+            <GeoJSONLayer data={data}/>
+          </LayersControl.Overlay>
         </LayersControl>
-
-        <GeoJSON data={data} pointToLayer={marker}>
-
-        </GeoJSON>
         <ZoomControl position='topright'/>
       </MapContainer>
     </div>
