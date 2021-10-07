@@ -13,7 +13,7 @@ let map;
 
 function Map(props) {
   const classes = useStyles();
-  const {data, activeItem} = props;
+  const {data, activeItem, setActiveItem} = props;
   const createMapContext = (mapContext) => {
     map = mapContext;
   };
@@ -49,7 +49,7 @@ function Map(props) {
             />
           </LayersControl.BaseLayer>
           <LayersControl.Overlay checked name={'События'}>
-            <GeoJSONLayer data={data} activeItem={activeItem}/>
+            <GeoJSONLayer data={data} activeItem={activeItem} setActiveItem={setActiveItem}/>
           </LayersControl.Overlay>
         </LayersControl>
         <ZoomControl position='topright'/>

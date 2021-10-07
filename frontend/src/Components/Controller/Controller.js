@@ -30,7 +30,7 @@ function Controller() {
     return (
         <>
             <ListArea setActiveItem={setActiveItem} activeItem={activeItem} data={data}/>
-            <Map activeItem={activeItem} data={data}/>
+            <Map activeItem={activeItem} data={data} setActiveItem={setActiveItem}/>
         </>
     )
 }
