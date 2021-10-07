@@ -14,29 +14,24 @@ const marker = (feature, latlng) => {
 };
 function GeoJSONLayer(props) {
 
-  const {data, activeItem} = props;
+  const {data, activeItem, setActiveItem} = props;
   const geojson = Object.assign(data, { features: data.features.filter((feature) => {
       const [lat, lon] = feature.geometry.coordinates;
       return lat && lon;
     })});
-  const showPopUp = () => {
-    if (activeItem) {
-      return (
-        <Popup>
-          <div>{
-            activeItem.properties.text
-          }</div>
-        </Popup>
-      )
-    } else {
-      return null;
-    }
-  };
   return(
     <GeoJSON data={geojson} pointToLayer={marker} onEachFeature={(feature, layer) => {
       layer.bindPopup(feature.properties.text);
+    }} eventHandlers={{
+      popupopen: (event) => {
+        const foundFeature = data.features.find((feature) => {
+          return feature.properties.id === event.sourceTarget.feature.properties.id;
+        });
+        if (foundFeature) {
+          setActiveItem(foundFeature);
+        }
+      }
     }}>
-      {/*{showPopUp()}*/}
     </GeoJSON>
   )
 }

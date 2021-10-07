@@ -50,7 +50,7 @@ function Controller() {
                 setFilter={_setFilter}
                 filter={filter}
             />
-            <Map activeItem={activeItem} data={data}/>
+            <Map activeItem={activeItem} data={data} setActiveItem={setActiveItem}/>
         </>
     )
 }
