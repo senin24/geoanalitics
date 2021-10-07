@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import {MapContainer, TileLayer, GeoJSON, Marker, Popup, LayersControl, ZoomControl } from 'react-leaflet';
 import useStyles from "./style";
 import GeoJSONLayer from "./GeoJSONLayer";
+import L from 'leaflet';
 
 
 /**
@@ -11,7 +12,6 @@ import GeoJSONLayer from "./GeoJSONLayer";
 let map;
 
 function Map(props) {
-
   const classes = useStyles();
   const {data, activeItem} = props;
   const createMapContext = (mapContext) => {
@@ -21,6 +21,10 @@ function Map(props) {
   useEffect(() => {
     if (!activeItem) return;
     map.flyTo([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]], 13);
+    const popup = L.popup()
+      .setLatLng([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]])
+      .setContent(activeItem.properties.text)
+      .openOn(map);
   }, [activeItem]);
   return (
     <div className={classes.container}>
@@ -45,7 +49,7 @@ function Map(props) {
             />
           </LayersControl.BaseLayer>
           <LayersControl.Overlay checked name={'События'}>
-            <GeoJSONLayer data={data}/>
+            <GeoJSONLayer data={data} activeItem={activeItem}/>
           </LayersControl.Overlay>
         </LayersControl>
         <ZoomControl position='topright'/>
