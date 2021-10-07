@@ -18,9 +18,9 @@ class EventDto(
 ) {
     data class Address(
         val region: String?,
-        val city: String?,
-        val house: String?,
-        val street: String?
+        val place: String,
+        val street: String?,
+        val building: String?
     )
 
     data class Coordinates(
