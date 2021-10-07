@@ -50,7 +50,7 @@ function Filter(props) {
                                 <Select variant="outlined" value={sourceData[0]}>
                                     {
                                         sourceData.map((item) => (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                            <MenuItem value={item} key={item}>{item}</MenuItem>
                                         ))
                                     }
                                 </Select>
@@ -59,7 +59,7 @@ function Filter(props) {
                                 <Select variant="outlined" value={typeData[0]}>
                                     {
                                         typeData.map((item) => (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                            <MenuItem value={item} key={item}>{item}</MenuItem>
                                         ))
                                     }
                                 </Select>
