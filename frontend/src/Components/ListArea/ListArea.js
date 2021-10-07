@@ -1,7 +1,6 @@
 import React from "react";
 import useStyles from "./style";
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
@@ -78,11 +77,13 @@ function ListArea(props) {
             <List>
                 {
                     FAKE_DATA.map((item) => (
-                        <ListItem key={item.id}>
-                            <ListItemButton onClick={_setActiveItem(item)} selected={_isActive(item)}>
-                                <ListItemText primary={item.text} />
-                            </ListItemButton>
-                        </ListItem>
+                        <ListItemButton
+                            dense
+                            onClick={_setActiveItem(item)}
+                            selected={_isActive(item)}
+                            key={item.id}>
+                            <ListItemText primary={item.text} />
+                        </ListItemButton>
                     ))
                 }
             </List>
