@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.math.BigDecimal
 import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
 import java.time.Instant
+import java.util.*
+
 
 @Service
 class UploadService(
@@ -28,67 +31,77 @@ class UploadService(
             .registerModules(KotlinModule())
     }
 
-    fun uploadJsontoPostGis(file: MultipartFile) {
+    fun uploadEvents(file: MultipartFile) {
 
-        val eventsDtoFromJson = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
+        val df = SimpleDateFormat("dd.MM.yyyy")
+        df.timeZone = TimeZone.getTimeZone("UTC+3")
+
+        val eventsDtoFromJson: EventsDto = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
 
         val geocodedEvents: List<Event> = eventsDtoFromJson.events
             .mapNotNull { eventDto ->
-                val geocode: GeocodeData = geocoder(getAddress(eventDto)) ?: return@mapNotNull null
+                val geocode: GeocodeData = geocoder(eventDto)
                 Event(
                     id = eventDto.id,
                     type = eventDto.type,
                     source = eventDto.source,
-                    date = Instant.parse(eventDto.date),
+                    date = df.parse(eventDto.date).toInstant(),
                     title = eventDto.title,
                     text = eventDto.text,
                     special = eventDto.special,
-                    x = BigDecimal(eventDto.coordinates?.x?:0),
-                    y = BigDecimal(eventDto.coordinates?.y?:0),
-                    geom = createGeometryPoint(
-                        longitude = geocode.longitude.toDouble(),
-                        latitude = geocode.longitude.toDouble()),
+                    x = geocode.x,
+                    y = geocode.y,
+                    geom = createGeometryPoint(geocode),
                     importance = BigDecimal(eventDto.importance),
                     region = eventDto.address?.region,
                     place = eventDto.address?.place,
                     street = eventDto.address?.street,
                     building = eventDto.address?.building,
-                    links = eventDto.links
-                    )
+                    links = eventDto.links?.toSet()
+                )
             }.toList()
         eventRepository.saveAll(geocodedEvents)
     }
 
-    private fun geocoder(addressShort: String?): GeocodeData? {
+    private fun geocoder(eventDto: EventsDto.Event): GeocodeData {
+        val xDto: BigDecimal? = eventDto.coordinates?.x
+        val yDto: BigDecimal? = eventDto.coordinates?.y
+        if (xDto != null && yDto != null) return GeocodeData(
+            x = xDto,
+            y = yDto
+        )
+        val address = getAddress(eventDto)
+
         val geocodeResponse: GeocodeResponse =
-            gisClient.getGeocodedAddress(GeocodeRequestParams(q = addressShort)) ?: return null
+            gisClient.getGeocodedAddress(GeocodeRequestParams(q = address)) ?: return GeocodeData()
         if (geocodeResponse.result.items.isEmpty()) {
             println(geocodeResponse.result)
-            return null
+            return GeocodeData()
         }
         return GeocodeData(
-            latitude = geocodeResponse.result.items[0].point.lat.toBigDecimal(),
-            longitude = geocodeResponse.result.items[0].point.lon.toBigDecimal(),
+            y = geocodeResponse.result.items[0].point.lat.toBigDecimal(),
+            x = geocodeResponse.result.items[0].point.lon.toBigDecimal(),
             addressGeocoded = geocodeResponse.result.items[0].fullName
         )
     }
 
-    fun createGeometryPoint(longitude: Double, latitude: Double): Point {
-        val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
+    fun createGeometryPoint(geocodeData: GeocodeData): Point? {
+        if (geocodeData.x == null || geocodeData.y == null) return null
+        val point = GeometryFactory().createPoint(Coordinate(geocodeData.x.toDouble(), geocodeData.y.toDouble()))
         point.srid = 4326
         return point
     }
 }
 
 data class GeocodeData(
-    val latitude: BigDecimal,
-    val longitude: BigDecimal,
-    val addressGeocoded: String
+    val y: BigDecimal? = null,
+    val x: BigDecimal? = null,
+    val addressGeocoded: String? = null
 )
 
 fun getAddress(eventDto: EventsDto.Event): String? {
     val streetAddress =
-        listOfNotNull(eventDto.address?.street, eventDto.address?.building).joinToString(separator = ", ")
+        listOfNotNull(eventDto.address?.street, eventDto.address?.building).joinToString(separator = " ")
     return listOfNotNull(
         eventDto.address?.region,
         eventDto.address?.place,

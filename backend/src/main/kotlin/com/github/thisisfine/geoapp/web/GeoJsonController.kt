@@ -1,5 +1,6 @@
 package com.github.thisisfine.geoapp.web
 
+import com.github.thisisfine.geoapp.model.UploadService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 @RestController
 @RequestMapping("/api/event")
 class GeoJsonController(
+    private val uploadService: UploadService
 ) {
 
     @GetMapping(value = ["/{path:[^\\.]*}"])
@@ -26,7 +28,7 @@ class GeoJsonController(
         redirectAttributes: RedirectAttributes
     ): String {
         println("File upload: ${file.originalFilename}")
-//        uploadService.uploadJsontoPostGis(file)
+        uploadService.uploadEvents(file)
         redirectAttributes.addFlashAttribute(
             "message",
             "You successfully uploaded " + file.originalFilename + "!"
