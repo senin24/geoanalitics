@@ -11,6 +11,8 @@ import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.multipart.MultipartFile
 import java.math.BigDecimal
 import java.nio.charset.StandardCharsets
@@ -24,6 +26,7 @@ class UploadService(
     private val eventRepository: EventRepository,
     private val gisClient: GisClient
 ) {
+    val df = SimpleDateFormat("dd.MM.yyyy")
 
     companion object {
         private val objectMapper = ObjectMapper()
@@ -32,36 +35,36 @@ class UploadService(
     }
 
     fun uploadEvents(file: MultipartFile) {
-
-        val df = SimpleDateFormat("dd.MM.yyyy")
-        df.timeZone = TimeZone.getTimeZone("UTC+3")
-
         val eventsDtoFromJson: EventsDto = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
+        saveEventDtoToDb(eventsDtoFromJson)
+    }
 
-        val geocodedEvents: List<Event> = eventsDtoFromJson.events
-            .mapNotNull { eventDto ->
-                val geocode: GeocodeData = geocoder(eventDto)
-                Event(
-                    id = eventDto.id,
-                    type = eventDto.type,
-                    source = eventDto.source,
-                    date = df.parse(eventDto.date).toInstant(),
-                    title = eventDto.title,
-                    text = eventDto.text,
-                    special = eventDto.special,
-                    x = geocode.x,
-                    y = geocode.y,
-                    geom = createGeometryPoint(geocode),
-                    importance = BigDecimal(eventDto.importance),
-                    region = eventDto.address?.region,
-                    place = eventDto.address?.place,
-                    street = eventDto.address?.street,
-                    building = eventDto.address?.building,
-                    links = eventDto.links?.toSet()
-                )
-            }.toList()
+    fun saveEventDtoToDb(eventsDto: EventsDto) {
+        df.timeZone = TimeZone.getTimeZone("UTC+3")
+        val geocodedEvents: List<Event> = eventsDto.events.mapNotNull { eventDto ->
+            val geocode: GeocodeData = geocoder(eventDto)
+            Event(
+                id = eventDto.id,
+                type = eventDto.type,
+                source = eventDto.source,
+                date = df.parse(eventDto.date).toInstant(),
+                title = eventDto.title,
+                text = eventDto.text,
+                special = eventDto.special,
+                x = geocode.x,
+                y = geocode.y,
+                geom = createGeometryPoint(geocode),
+                importance = BigDecimal(eventDto.importance),
+                region = eventDto.address?.region,
+                place = eventDto.address?.place,
+                street = eventDto.address?.street,
+                building = eventDto.address?.building,
+                links = eventDto.links?.toSet()
+            )
+        }.toList()
         eventRepository.saveAll(geocodedEvents)
     }
+
 
     private fun geocoder(eventDto: EventsDto.Event): GeocodeData {
         val xDto: BigDecimal? = eventDto.coordinates?.x
