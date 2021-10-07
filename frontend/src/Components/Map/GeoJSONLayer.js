@@ -2,15 +2,27 @@ import {GeoJSON, Popup} from 'react-leaflet';
 import { circleMarker } from 'leaflet';
 
 const MARKER_STYLE = {
-  radius: 8,
+  radius: 5,
   fillColor: "#ff7800",
   color: "#000",
   weight: 1,
   opacity: 1,
   fillOpacity: 0.8
 };
+const MARKER_SPECIAL_STYLE = {
+  radius: 5,
+  fillColor: "#3f51b5",
+  color: "#000",
+  weight: 1,
+  opacity: 1,
+  fillOpacity: 0.8
+};
 const marker = (feature, latlng) => {
-  return circleMarker(latlng, MARKER_STYLE)
+  if (feature.properties.special) {
+    return circleMarker(latlng, MARKER_SPECIAL_STYLE);
+  } else {
+    return circleMarker(latlng, MARKER_STYLE);
+  }
 };
 function GeoJSONLayer(props) {
 
