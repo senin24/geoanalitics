@@ -1,8 +1,9 @@
 package com.github.thisisfine.geoapp.model;
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 
-interface EventRepository : JpaRepository<Event, String> {
+interface EventRepository : JpaRepository<Event, String>, JpaSpecificationExecutor<Event> {
 
     fun findAllByType(type: String): List<Event>
 

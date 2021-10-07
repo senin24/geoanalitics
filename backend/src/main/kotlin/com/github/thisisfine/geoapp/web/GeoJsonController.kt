@@ -4,6 +4,10 @@ import com.github.thisisfine.geoapp.dto.EventsDto
 import com.github.thisisfine.geoapp.service.GeoJsonService
 import com.github.thisisfine.geoapp.model.UploadService
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.SortDefault
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -18,10 +22,30 @@ class GeoJsonController(
     private val uploadService: UploadService
 ) {
 
-    @GetMapping(value = ["/{path:[^\\.]*}"])
-    @Operation(hidden = true)
-    fun redirect(): String? {
-        return "forward:/"
+    @GetMapping("/{id}")
+    @Operation(
+        summary = "Get Event by code",
+        description = "http://localhost:8090/api/event/1"
+    )
+    fun getEventByCode(@PathVariable(name = "id") id: String): ResponseEntity<Feature> =
+        geoJsonService.getEventById(id)
+            ?.let { feature -> ResponseEntity.ok(feature) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping
+    @Operation(summary = "Find all Events by filters")
+    fun getAllEventsByParams(
+        @RequestParam(name = "type", required = false) type: String?,
+        @RequestParam(name = "source", required = false) source: String?,
+        @RequestParam(name = "startDate", required = false) startDate: String?,
+        @RequestParam(name = "endDate", required = false) endDate: String?,
+    ): FeatureCollection =
+        geoJsonService.getAllEventsByParams(type, source, startDate, endDate)
+
+    @PostMapping("/saveEventsDtoToDb")
+    @Operation(summary = "Save Events Json to DB")
+    fun saveEventsDtoToDb(@RequestBody eventsDto: EventsDto){
+        uploadService.saveEventDtoToDb(eventsDto)
     }
 
     @PostMapping("/saveFileEventsToDb", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
@@ -41,39 +65,9 @@ class GeoJsonController(
         return "redirect:/"
     }
 
-    @GetMapping
-    @Operation(summary = "Get all Events")
-    fun getAllEvents(): FeatureCollection = geoJsonService.getAllEvents()
-
-    @GetMapping("/{id}")
-    @Operation(
-        summary = "Get Event by code",
-        description = "http://localhost:8090/api/event/1"
-    )
-    fun getEventByCode(@PathVariable(name = "id") id: String): ResponseEntity<Feature> =
-        geoJsonService.getEventById(id)
-            ?.let { feature -> ResponseEntity.ok(feature) }
-            ?: ResponseEntity.notFound().build()
-
-    @PostMapping
-    @GetMapping("/filterByType", params = ["type"])
-    @Operation(summary = "Get Events by Type", tags = ["filters"])
-    fun getEventsByType(type: String): FeatureCollection =
-        geoJsonService.getEventsByType(type)
-
-    @GetMapping("/filterBySource", params = ["source"])
-    @Operation(summary = "Get Events by Source", tags = ["filters"])
-    fun getEventsBySource(source: String): FeatureCollection =
-        geoJsonService.getEventsBySource(source)
-
-    @GetMapping("/filterByTypeAndSource", params = ["type", "source"])
-    @Operation(summary = "Get Events by Type an Source", tags = ["filters"])
-    fun getEventsByTypeAndSource(type: String, source: String): FeatureCollection =
-        geoJsonService.getEventsByTypeAndSource(type, source)
-
-    @PostMapping("/saveEventsDtoToDb")
-    @Operation(summary = "Save Events Json to DB")
-    fun saveEventsDtoToDb(@RequestBody eventsDto: EventsDto){
-        uploadService.saveEventDtoToDb(eventsDto)
+    @GetMapping(value = ["/{path:[^\\.]*}"])
+    @Operation(hidden = true)
+    fun redirect(): String? {
+        return "forward:/"
     }
 }
