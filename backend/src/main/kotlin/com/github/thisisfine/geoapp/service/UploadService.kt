@@ -37,32 +37,8 @@ class UploadService(
     fun uploadEvents(file: MultipartFile) {
 
         df.timeZone = TimeZone.getTimeZone("UTC+3")
-
         val eventsDtoFromJson: EventsDto = objectMapper.readValue(String(file.bytes, StandardCharsets.UTF_8), EventsDto::class.java)
-
-        val geocodedEvents: List<Event> = eventsDtoFromJson.events
-            .mapNotNull { eventDto ->
-                val geocode: GeocodeData = geocoder(eventDto)
-                Event(
-                    id = eventDto.id,
-                    type = eventDto.type,
-                    source = eventDto.source,
-                    date = df.parse(eventDto.date).toInstant(),
-                    title = eventDto.title,
-                    text = eventDto.text,
-                    special = eventDto.special,
-                    x = geocode.x,
-                    y = geocode.y,
-                    geom = createGeometryPoint(geocode),
-                    importance = BigDecimal(eventDto.importance),
-                    region = eventDto.address?.region,
-                    place = eventDto.address?.place,
-                    street = eventDto.address?.street,
-                    building = eventDto.address?.building,
-                    links = eventDto.links?.toSet()
-                )
-            }.toList()
-        eventRepository.saveAll(geocodedEvents)
+        saveEventDtoToDb(eventsDtoFromJson)
     }
 
     fun saveEventDtoToDb(eventsDto: EventsDto) {
@@ -89,6 +65,7 @@ class UploadService(
         }.toList()
         eventRepository.saveAll(geocodedEvents)
     }
+
 
     private fun geocoder(eventDto: EventsDto.Event): GeocodeData {
         val xDto: BigDecimal? = eventDto.coordinates?.x
