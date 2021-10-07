@@ -20,7 +20,7 @@ function Map(props) {
 
   useEffect(() => {
     if (!activeItem) return;
-    map.flyTo(activeItem.geometry.coordinates);
+    map.flyTo([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]], 13);
   }, [activeItem]);
   return (
     <div className={classes.container}>
