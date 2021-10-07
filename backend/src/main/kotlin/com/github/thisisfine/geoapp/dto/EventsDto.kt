@@ -2,6 +2,7 @@ package com.github.thisisfine.geoapp.dto
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.math.BigDecimal
 
 //TODO Андрей,  укажи какие поля нулабельны
 data class EventsDto(
@@ -23,31 +24,31 @@ data class EventsDto(
         val text: String,
         @JsonProperty("special", required = true)
         val special: Boolean = false,
-        @JsonProperty("address", required = false)
+        @JsonProperty("address")
         val address: Address?,
-        @JsonProperty("coordinates", required = false)
+        @JsonProperty("coordinates")
         val coordinates: Coordinates?,
-        @JsonProperty("importance", required = true)
+        @JsonProperty("importance")
         val importance: Int = 1,
         @JsonProperty("links", required = false)
         val links: List<String>?
     ) {
         data class Address(
-            @JsonProperty("region", required = false)
+            @JsonProperty("region")
             val region: String?,
-            @JsonProperty("place", required = false)
-            val palce: String?,
-            @JsonProperty("street", required = false)
+            @JsonProperty("place")
+            val place: String?,
+            @JsonProperty("street")
             val street: String?,
-            @JsonProperty("city", required = false)
+            @JsonProperty("city")
             val building: String?,
         )
 
         data class Coordinates(
             @JsonProperty("x")
-            val x: Int,
+            val x: BigDecimal?,
             @JsonProperty("y")
-            val y: Int
+            val y: BigDecimal?
         )
     }
 }

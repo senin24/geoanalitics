@@ -11,7 +11,7 @@ import javax.persistence.*
 data class Event (
     @Id
     @Column(name = "id", nullable = false)
-    val id: Long,
+    val id: String,
 
     @Column(name = "type", nullable = false, length = 255)
     val type: String,
