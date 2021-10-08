@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Heatmap from 'leaflet-heatmap';
 
 /**
@@ -6,6 +6,7 @@ import Heatmap from 'leaflet-heatmap';
  */
 function HeatmapLayer(props) {
   const {data, map} = props;
+  const [layer, setLayer] = useState(null);
   useEffect(() => {
     if(!map) {
       return;
@@ -29,6 +30,7 @@ function HeatmapLayer(props) {
       valueField: 'importance'
     };
     const layer = new Heatmap(cfg);
+    setLayer(layer);
     layer.setData({max: 2, data:data.features.map((feature) => {
         return {
           lat: feature.geometry.coordinates[1],
@@ -42,6 +44,16 @@ function HeatmapLayer(props) {
       map.removeLayer(layer)
     }
   }, [map]);
+  useEffect(() => {
+    if (!layer) return;
+    layer.setData({max: 2, data:data.features.map((feature) => {
+        return {
+          lat: feature.geometry.coordinates[1],
+          lng: feature.geometry.coordinates[0],
+          importance: feature.properties.importance,
+        }
+      })});
+  }, [data]);
 
   return null;
 }
