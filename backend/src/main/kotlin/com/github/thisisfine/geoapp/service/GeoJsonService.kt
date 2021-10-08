@@ -133,6 +133,6 @@ class GeoJsonService(
                 y = coordinates.y
             )
             ?.let { updatedEvent -> eventRepository.save(updatedEvent) }
-            ?.let { savedEvent -> mapToFeature(savedEvent)}
+            ?.let { savedEvent -> mapToFeature(savedEvent) }
 
 }

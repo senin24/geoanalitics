@@ -34,8 +34,9 @@ class GeoJsonController(
 
     @PostMapping("/{id}")
     @Operation(summary = "Update Event coordinates")
-    fun updateEventCoordinates(@PathVariable(name = "id") id: String,
-                               @RequestBody coordinates: CoordinatesDto
+    fun updateEventCoordinates(
+        @PathVariable(name = "id") id: String,
+        @RequestBody coordinates: CoordinatesDto
     ): ResponseEntity<Feature> =
         geoJsonService.updateEventCoordinates(id, coordinates)
             ?.let { feature -> ResponseEntity.ok(feature) }
