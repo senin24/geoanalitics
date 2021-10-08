@@ -12,7 +12,7 @@ import HeatLayer from './HeatmapLayer';
 
 function Map(props) {
   const classes = useStyles();
-  const {data, activeItem, setActiveItem} = props;
+  const {data, dataHeat, activeItem, setActiveItem} = props;
   const [map, setMap] = useState(null);
   const createMapContext = (mapContext) => {
     setMap(mapContext);
@@ -80,7 +80,7 @@ function Map(props) {
           </LayersControl.Overlay>
           <LayersControl.Overlay checked name={'Тепловая карта'}>
             <LayerGroup>
-              <HeatLayer data={data} map={map}/>
+              <HeatLayer data={dataHeat} map={map}/>
             </LayerGroup>
           </LayersControl.Overlay>
         </LayersControl>

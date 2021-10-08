@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Map from '../Map/Map';
 import ListArea from "../ListArea/ListArea";
+import FilterHeatLayer from '../Map/FlterHeatLayer';
 import {serviceJson} from "../../services";
 import useStyles from "./style";
 
@@ -9,7 +10,9 @@ function Controller() {
 
     const [activeItem, setActiveItem] = useState(null);
     const [data, setData] = useState(null);
+    const [dataHeat, setDataHeat] = useState(null);
     const [filter, setFilter] = useState({source: '', type: '', startDate:'', endDate:''});
+    const [filterHeat, setFilterHeat] = useState({startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString(), endDate:new Date().toISOString()});
     // TODO убрать
     /*const _getData = async () => {
         const data = await serviceJson('/api/event');
@@ -18,12 +21,19 @@ function Controller() {
 
     const _getFilterData = async () => {
         const data = await serviceJson('/api/event', filter);
-        // TODO раскоментировать
         setData(data);
+    };
+    const _getFilterDataHeat = async () => {
+        const data = await serviceJson('/api/event', filterHeat);
+        setDataHeat(data);
     };
 
     const _setFilter = (newFilter) => {
         setFilter({...filter, ...newFilter});
+    };
+
+    const _setFilterHeat = (newFilter) => {
+        setFilterHeat({...filterHeat, ...newFilter});
     };
 
     // TODO убрать
@@ -34,6 +44,9 @@ function Controller() {
     useEffect(() => {
         void _getFilterData();
     }, [filter]);
+    useEffect(() => {
+        void _getFilterDataHeat();
+    }, [filterHeat]);
 
     if (!data) {
         return (
@@ -52,7 +65,8 @@ function Controller() {
                 setFilter={_setFilter}
                 filter={filter}
             />
-            <Map activeItem={activeItem} data={data} setActiveItem={setActiveItem}/>
+            <Map activeItem={activeItem} dataHeat={dataHeat} data={data} setActiveItem={setActiveItem}/>
+            <FilterHeatLayer filter={filterHeat} setFilter={_setFilterHeat}/>
         </>
     )
 }
