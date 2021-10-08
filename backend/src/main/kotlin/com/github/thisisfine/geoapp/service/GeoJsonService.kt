@@ -2,16 +2,16 @@ package com.github.thisisfine.geoapp.service
 
 import com.github.thisisfine.geoapp.model.Event
 import com.github.thisisfine.geoapp.model.EventRepository
+import com.github.thisisfine.geoapp.web.CoordinatesDto
 import com.github.thisisfine.geoapp.web.Feature
 import com.github.thisisfine.geoapp.web.FeatureCollection
-import liquibase.pro.packaged.cb
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import javax.persistence.criteria.Predicate
 
 
 @Service
@@ -24,6 +24,7 @@ class GeoJsonService(
             .withZone(ZoneId.from(ZoneOffset.UTC))
     }
 
+    @Transactional(readOnly = true)
     fun getEventById(id: String): Feature? =
         eventRepository.findById(id)
             .orElse(null)
@@ -57,6 +58,7 @@ class GeoJsonService(
             )
         )
 
+    @Transactional(readOnly = true)
     fun getAllEventsByParams(type: String?, source: String?, startDate: String?, endDate: String?): FeatureCollection {
 
         if (listOfNotNull(type, source, startDate, endDate).none { s -> s.isNotEmpty() }) {
@@ -122,5 +124,15 @@ class GeoJsonService(
                 )
             }
 
+    @Transactional
+    fun updateEventCoordinates(id: String, coordinates: CoordinatesDto): Feature? =
+        eventRepository.findById(id)
+            .orElse(null)
+            ?.copy(
+                x = coordinates.x,
+                y = coordinates.y
+            )
+            ?.let { updatedEvent -> eventRepository.save(updatedEvent) }
+            ?.let { savedEvent -> mapToFeature(savedEvent) }
 
 }

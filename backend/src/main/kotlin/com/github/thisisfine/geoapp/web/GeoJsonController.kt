@@ -32,6 +32,16 @@ class GeoJsonController(
             ?.let { feature -> ResponseEntity.ok(feature) }
             ?: ResponseEntity.notFound().build()
 
+    @PostMapping("/{id}")
+    @Operation(summary = "Update Event coordinates")
+    fun updateEventCoordinates(
+        @PathVariable(name = "id") id: String,
+        @RequestBody coordinates: CoordinatesDto
+    ): ResponseEntity<Feature> =
+        geoJsonService.updateEventCoordinates(id, coordinates)
+            ?.let { feature -> ResponseEntity.ok(feature) }
+            ?: ResponseEntity.notFound().build()
+
     @GetMapping
     @Operation(summary = "Find all Events by filters")
     fun getAllEventsByParams(
@@ -44,7 +54,7 @@ class GeoJsonController(
 
     @PostMapping("/saveEventsDtoToDb")
     @Operation(summary = "Save Events Json to DB")
-    fun saveEventsDtoToDb(@RequestBody eventsDto: EventsDto){
+    fun saveEventsDtoToDb(@RequestBody eventsDto: EventsDto) {
         uploadService.saveEventDtoToDb(eventsDto)
     }
 
