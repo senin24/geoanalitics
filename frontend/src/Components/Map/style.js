@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   containerFilter: {
     position: 'absolute',
-    width: '350px',
+    width: '370px',
     border: "1px solid #808080ba",
     backgroundColor: 'white',
     borderRadius: '6px',
@@ -27,8 +27,10 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box'
   },
   filtersTitle: {
-    marginBottom: '10px',
-    fontSize: '16px'
+    marginBottom: '15px',
+
+    fontSize: '16px',
+    textAlign: 'center',
   },
   filters: {
     display: 'flex',

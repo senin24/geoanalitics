@@ -17,12 +17,12 @@ function FilterHeatLayer(props) {
   };
   return(
     <div className={classes.containerFilter}>
-      <div className={classes.filtersTitle}>Фильтр тепловой карты</div>
+      <div className={classes.filtersTitle}>Параметры тепловой карты</div>
       <div className={classes.filters}>
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
           <KeyboardDatePicker
             inputVariant="outlined"
-            label="Дата события"
+            label="Дата начала"
             format="dd MMM yyyy"
             value={filter.startDate || null}
             onChange={_onChangeDateStart}
@@ -31,7 +31,7 @@ function FilterHeatLayer(props) {
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
           <KeyboardDatePicker
             inputVariant="outlined"
-            label="Дата события"
+            label="Дата окончания"
             format="dd MMM yyyy"
             value={filter.endDate || null}
             onChange={_onChangeDateEnd}
