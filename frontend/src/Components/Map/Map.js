@@ -32,15 +32,15 @@ function Map(props) {
       if (key === 'date') {
         const date = new Date(data[key]);
         let formatter = new Intl.DateTimeFormat("ru");
-        popup += `<div>${alias[key]}: ${formatter.format(date) }</div>`;
+        popup += `<div><strong>${alias[key]}: </strong>${formatter.format(date) }</div>`;
       } else if (key === 'address') {
-        popup += `<div>${alias[key]}: ${Object.keys(data[key]).map((prop) => data[key][prop]).join(', ')}</div>`
+        popup += `<div><strong>${alias[key]}: </strong>${Object.keys(data[key]).map((prop) => data[key][prop]).join(', ')}</div>`
       } else if (key === 'special') {
-        popup += `<div>${alias[key]}: ${data[key] ? 'Да' : 'Нет'}</div>`
+        popup += `<div><strong>${alias[key]}:</strong> ${data[key] ? 'Да' : 'Нет'}</div>`
       } else if (key === 'title') {
-        popup += `<div><center><strong>${data[key]}</strong></center></div>`
+        popup += `<div><center><b>${data[key]}</b></center></div>`
       } else {
-        popup += `<div>${alias[key]}: ${data[key]}</div>`
+        popup += `<div><strong>${alias[key]}:</strong> ${data[key]}</div>`
       }
     });
     popup += '<div>';
