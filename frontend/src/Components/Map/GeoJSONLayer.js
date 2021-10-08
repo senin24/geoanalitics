@@ -27,7 +27,7 @@ const marker = (feature, latlng) => {
 };
 function GeoJSONLayer(props) {
 
-  const {data, setActiveItem} = props;
+  const {data, popup, setActiveItem} = props;
   const [layer, setLayer] = useState(null);
   let geojson = Object.assign(data, { features: data.features.filter((feature) => {
       const [lat, lon] = feature.geometry.coordinates;
@@ -45,7 +45,7 @@ function GeoJSONLayer(props) {
   }, [data]);
   return(
     <GeoJSON data={geojson} pointToLayer={marker} onEachFeature={(feature, layer) => {
-      layer.bindPopup(feature.properties.title);
+      layer.bindPopup(popup(feature.properties));
     }} eventHandlers={{
       add: (evt) => {
         setLayer(evt.sourceTarget);

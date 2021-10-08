@@ -24,7 +24,8 @@ function Map(props) {
     date: "Дата",
     text: "Описание",
     special: "Специальное",
-    address: "Адрес"
+    address: "Адрес",
+    importance: "Значимость"
   };
   const _createPopUp = (data) => {
     let popup = "<div style='display: flex; flex-direction: column'>";
@@ -78,7 +79,7 @@ function Map(props) {
             />
           </LayersControl.BaseLayer>
           <LayersControl.Overlay checked name={'События'}>
-            <GeoJSONLayer data={data} activeItem={activeItem} setActiveItem={setActiveItem}/>
+            <GeoJSONLayer data={data} activeItem={activeItem} setActiveItem={setActiveItem} alias={alias} popup={_createPopUp}/>
           </LayersControl.Overlay>
           <LayersControl.Overlay checked name={'Тепловая карта'}>
             <LayerGroup>
