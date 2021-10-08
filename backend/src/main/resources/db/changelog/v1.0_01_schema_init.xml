@@ -73,5 +73,13 @@
 <!--                                 referencedTableName="events"/>-->
 <!--    </changeSet>-->
 
+    <changeSet author="Pavel_Senin" id="text_increase_size">
+        <modifyDataType
+                columnName="text"
+                newDataType="varchar(10000)"
+                tableName="events"/>
+    </changeSet>
+
+
 
 </databaseChangeLog>
