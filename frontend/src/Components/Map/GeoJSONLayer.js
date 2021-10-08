@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {GeoJSON, Popup} from 'react-leaflet';
 import { circleMarker } from 'leaflet';
 
@@ -27,7 +27,8 @@ const marker = (feature, latlng) => {
 };
 function GeoJSONLayer(props) {
 
-  const {data, activeItem, setActiveItem} = props;
+  const {data, setActiveItem} = props;
+  const [layer, setLayer] = useState(null);
   let geojson = Object.assign(data, { features: data.features.filter((feature) => {
       const [lat, lon] = feature.geometry.coordinates;
       return lat && lon;
@@ -36,12 +37,19 @@ function GeoJSONLayer(props) {
     geojson = Object.assign(data, { features: data.features.filter((feature) => {
         const [lat, lon] = feature.geometry.coordinates;
         return lat && lon;
-      })})
+      })});
+    if (layer) {
+      layer.clearLayers();
+      layer.addData(geojson);
+    }
   }, [data]);
   return(
     <GeoJSON data={geojson} pointToLayer={marker} onEachFeature={(feature, layer) => {
       layer.bindPopup(feature.properties.title);
     }} eventHandlers={{
+      add: (evt) => {
+        setLayer(evt.sourceTarget);
+      },
       popupopen: (event) => {
         const foundFeature = data.features.find((feature) => {
           return feature.properties.id === event.sourceTarget.feature.properties.id;
