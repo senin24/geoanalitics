@@ -25,7 +25,7 @@ data class Event (
     @Column(name = "title", nullable = false, length = 255)
     val title: String,
 
-    @Column(name = "text", nullable = false, length = 1000)
+    @Column(name = "text", nullable = false, length = 10000)
     val text: String,
 
     @Column(name = "special", nullable = false)
