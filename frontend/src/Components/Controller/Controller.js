@@ -10,24 +10,26 @@ function Controller() {
     const [activeItem, setActiveItem] = useState(null);
     const [data, setData] = useState(null);
     const [filter, setFilter] = useState({source: '', type: '', startDate:'', endDate:''});
-
-    const _getData = async () => {
+    // TODO убрать
+    /*const _getData = async () => {
         const data = await serviceJson('/api/event');
         setData(data);
-    };
+    };*/
 
     const _getFilterData = async () => {
-        const data = await serviceJson('/api/event/filterByType', filter);
-        // setData(data);
+        const data = await serviceJson('/api/event', filter);
+        // TODO раскоментировать
+        setData(data);
     };
 
     const _setFilter = (newFilter) => {
         setFilter({...filter, ...newFilter});
-    }
+    };
 
-    useEffect(() => {
+    // TODO убрать
+    /*useEffect(() => {
         void _getData();
-    },[]);
+    },[]);*/
 
     useEffect(() => {
         void _getFilterData();

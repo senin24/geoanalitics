@@ -32,8 +32,8 @@ function Filter(props) {
     }
 
     const _onChangeDate = async (date) => {
-        const value = new Date(date).toISOString();
-        setFilter({startDate: value, endDate: value});
+        const value = new Date(date);
+        setFilter({startDate: value.toISOString(), endDate: new Date(value.setDate(value.getDate() + 1)).toISOString()});
     }
 
     if (!sourceData || !typeData) {

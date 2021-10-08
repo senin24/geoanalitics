@@ -9,9 +9,9 @@ export const serviceJson = async (address, body, method, errorBackHandler) => {
     let serverAddress = address || '/';
     if (body) {
         serverAddress = `${serverAddress}?`;
-        const fields = Object.keys(body);
+        const fields = Object.keys(body).filter((key)=>body[key]);
         fields.forEach((field, index) => {
-            serverAddress = `${serverAddress}${field}=${body[field]}${index === fields.length - 1 ? '' : ','}`
+            serverAddress = `${serverAddress}${field}=${body[field]}${index === fields.length - 1 ? '' : '&'}`
         });
     }
     const params = {
