@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   containerFilter: {
     position: 'absolute',
-    width: '370px',
+    width: '390px',
     border: "1px solid #808080ba",
     backgroundColor: 'white',
     borderRadius: '6px',

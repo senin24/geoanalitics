@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'absolute',
-    width: '370px',
+    width: '390px',
     border: "1px solid #808080ba",
     backgroundColor: 'white',
     borderRadius: '6px',
@@ -17,7 +17,9 @@ const useStyles = makeStyles((theme) => ({
   },
   eventItem: {
     cursor: 'pointer',
-    fontSize: '14px'
+    fontSize: '14px',
+    display: 'flex',
+    alignItems: 'center'
   },
   iconSpecial: {
     marginLeft: '5px',
@@ -44,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
   },
   eventItemText: {
     fontSize: '12px'
+  },
+  editIcon: {
+    display: 'flex',
+    marginLeft: '4px'
   }
 }));
 
