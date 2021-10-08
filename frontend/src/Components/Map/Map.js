@@ -34,7 +34,7 @@ function Map(props) {
         let formatter = new Intl.DateTimeFormat("ru");
         popup += `<div><strong>${alias[key]}: </strong>${formatter.format(date) }</div>`;
       } else if (key === 'address') {
-        popup += `<div><strong>${alias[key]}: </strong>${Object.keys(data[key]).map((prop) => data[key][prop]).join(', ')}</div>`
+        popup += `<div><strong>${alias[key]}: </strong>${Object.keys(data[key]).filter((prop) => data[key][prop]).map((prop) => data[key][prop]).join(', ')}</div>`
       } else if (key === 'special') {
         popup += `<div><strong>${alias[key]}:</strong> ${data[key] ? 'Да' : 'Нет'}</div>`
       } else if (key === 'title') {
