@@ -1,13 +1,22 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Heatmap from 'leaflet-heatmap';
 
 /**
  * @return {null}
  */
 function HeatmapLayer(props) {
-  const {data, map} = props;
+  const {data, map, visible} = props;
+  const [layer, setLayer] = useState(null);
   useEffect(() => {
-    if(!map) {
+    if (!layer) return;
+    if(visible) {
+      map.addLayer(layer);
+    } else {
+      map.removeLayer(layer);
+    }
+  }, [visible]);
+  useEffect(() => {
+    if(!map || !data) {
       return;
     }
     const cfg = {
@@ -29,6 +38,7 @@ function HeatmapLayer(props) {
       valueField: 'importance'
     };
     const layer = new Heatmap(cfg);
+    setLayer(layer);
     layer.setData({max: 2, data:data.features.map((feature) => {
         return {
           lat: feature.geometry.coordinates[1],
@@ -42,6 +52,16 @@ function HeatmapLayer(props) {
       map.removeLayer(layer)
     }
   }, [map]);
+  useEffect(() => {
+    if (!layer) return;
+    layer.setData({max: 2, data:data.features.map((feature) => {
+        return {
+          lat: feature.geometry.coordinates[1],
+          lng: feature.geometry.coordinates[0],
+          importance: feature.properties.importance,
+        }
+      })});
+  }, [data]);
 
   return null;
 }

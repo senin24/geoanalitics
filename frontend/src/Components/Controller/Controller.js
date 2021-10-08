@@ -13,11 +13,6 @@ function Controller() {
     const [dataHeat, setDataHeat] = useState(null);
     const [filter, setFilter] = useState({source: '', type: '', startDate:'', endDate:''});
     const [filterHeat, setFilterHeat] = useState({startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString(), endDate:new Date().toISOString()});
-    // TODO убрать
-    /*const _getData = async () => {
-        const data = await serviceJson('/api/event');
-        setData(data);
-    };*/
 
     const _getFilterData = async () => {
         const data = await serviceJson('/api/event', filter);
@@ -36,14 +31,15 @@ function Controller() {
         setFilterHeat({...filterHeat, ...newFilter});
     };
 
-    // TODO убрать
-    /*useEffect(() => {
-        void _getData();
-    },[]);*/
+    const _allReload = () => {
+        _setFilter();
+        _setFilterHeat();
+    }
 
     useEffect(() => {
         void _getFilterData();
     }, [filter]);
+
     useEffect(() => {
         void _getFilterDataHeat();
     }, [filterHeat]);
@@ -64,6 +60,7 @@ function Controller() {
                 data={data}
                 setFilter={_setFilter}
                 filter={filter}
+                allReload={_allReload}
             />
             <Map activeItem={activeItem} dataHeat={dataHeat} data={data} setActiveItem={setActiveItem}/>
             <FilterHeatLayer filter={filterHeat} setFilter={_setFilterHeat}/>

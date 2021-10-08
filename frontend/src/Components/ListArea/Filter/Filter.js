@@ -59,7 +59,12 @@ function Filter(props) {
                         </MuiPickersUtilsProvider>
                         <div className={classes.selectFilters}>
                             <div className={classes.sourceFilter}>
-                                <Select variant="outlined" value={filter.source} onChange={_onChangeSource}>
+                                <Select
+                                    displayEmpty
+                                    variant="outlined"
+                                    value={filter.source}
+                                    onChange={_onChangeSource}>
+                                    <MenuItem value="">Источник события</MenuItem>
                                     {
                                         sourceData.map((item) => (
                                             <MenuItem value={item} key={item}>{item}</MenuItem>
@@ -68,7 +73,13 @@ function Filter(props) {
                                 </Select>
                             </div>
                             <div className={classes.typeFilter}>
-                                <Select variant="outlined" value={filter.type} onChange={_onChangeType}>
+                                <Select
+                                    displayEmpty
+                                    variant="outlined"
+                                    value={filter.type}
+                                    onChange={_onChangeType}
+                                >
+                                    <MenuItem value="">Тип события</MenuItem>
                                     {
                                         typeData.map((item) => (
                                             <MenuItem value={item} key={item}>{item}</MenuItem>
