@@ -32,9 +32,9 @@ function Map(props) {
       if (key === 'date') {
         const date = new Date(data[key]);
         let formatter = new Intl.DateTimeFormat("ru");
-        popup += `<div>${alias[key]}:${formatter.format(date) }</div>`;
+        popup += `<div>${alias[key]}: ${formatter.format(date) }</div>`;
       } else if (key === 'address') {
-        popup += `<div>${alias[key]}${Object.keys(data[key]).map((prop) => data[key][prop]).join(',')}</div>`
+        popup += `<div>${alias[key]}: ${Object.keys(data[key]).map((prop) => data[key][prop]).join(',')}</div>`
       } else if (key === 'special') {
         popup += `<div>${alias[key]}: ${data[key] ? 'Да' : 'Нет'}</div>`
       } else {
