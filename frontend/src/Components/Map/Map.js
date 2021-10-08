@@ -13,13 +13,40 @@ function Map(props) {
   const createMapContext = (mapContext) => {
     setMap(mapContext);
   };
+  const alias = {
+    title: "Заголовок",
+    type: "Тип",
+    source: "Источник",
+    date: "Дата",
+    text: "Описание",
+    special: "Специальное",
+    address: "Адрес"
+  };
+  const _createPopUp = (data) => {
+    let popup = "<div style='display: flex; flex-direction: column'>";
+    Object.keys(alias).forEach((key) => {
+      if (key === 'date') {
+        const date = new Date(data[key]);
+        let formatter = new Intl.DateTimeFormat("ru");
+        popup += `<div>${alias[key]}:${formatter.format(date) }</div>`;
+      } else if (key === 'address') {
+        popup += `<div>${alias[key]}${Object.keys(data[key]).map((prop) => data[key][prop]).join(',')}</div>`
+      } else if (key === 'special') {
+        popup += `<div>${alias[key]}: ${data[key] ? 'Да' : 'Нет'}</div>`
+      } else {
+        popup += `<div>${alias[key]}: ${data[key]}</div>`
+      }
+    });
+    popup += '<div>';
+    return popup;
+  };
 
   useEffect(() => {
     if (!activeItem) return;
     map.flyTo([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]], 13);
     const popup = L.popup()
       .setLatLng([activeItem.geometry.coordinates[1], activeItem.geometry.coordinates[0]])
-      .setContent(activeItem.properties.title)
+      .setContent(_createPopUp(activeItem.properties))
       .openOn(map);
   }, [activeItem]);
   return (
