@@ -14,6 +14,7 @@ function Map(props) {
   const classes = useStyles();
   const {data, dataHeat, activeItem, setActiveItem} = props;
   const [map, setMap] = useState(null);
+  const [visibleHeat, setVisibleHeat] = useState(true);
   const createMapContext = (mapContext) => {
     setMap(mapContext);
   };
@@ -82,8 +83,15 @@ function Map(props) {
             <GeoJSONLayer data={data} activeItem={activeItem} setActiveItem={setActiveItem} alias={alias} popup={_createPopUp}/>
           </LayersControl.Overlay>
           <LayersControl.Overlay checked name={'Тепловая карта'}>
-            <LayerGroup>
-              <HeatLayer data={dataHeat} map={map}/>
+            <LayerGroup eventHandlers={{
+              remove: (evt) => {
+                setVisibleHeat(false);
+              },
+              add: (evt) => {
+                setVisibleHeat(true);
+              }
+            }}>
+              <HeatLayer data={dataHeat} map={map} visible={visibleHeat}/>
             </LayerGroup>
           </LayersControl.Overlay>
         </LayersControl>

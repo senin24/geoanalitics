@@ -5,10 +5,18 @@ import Heatmap from 'leaflet-heatmap';
  * @return {null}
  */
 function HeatmapLayer(props) {
-  const {data, map} = props;
+  const {data, map, visible} = props;
   const [layer, setLayer] = useState(null);
   useEffect(() => {
-    if(!map) {
+    if (!layer) return;
+    if(visible) {
+      map.addLayer(layer);
+    } else {
+      map.removeLayer(layer);
+    }
+  }, [visible]);
+  useEffect(() => {
+    if(!map || !data) {
       return;
     }
     const cfg = {
