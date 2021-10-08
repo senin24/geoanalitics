@@ -17,24 +17,27 @@ function FilterHeatLayer(props) {
   };
   return(
     <div className={classes.containerFilter}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
-        <KeyboardDatePicker
-          inputVariant="outlined"
-          label="Дата события"
-          format="dd MMM yyyy"
-          value={filter.startDate || null}
-          onChange={_onChangeDateStart}
-        />
-      </MuiPickersUtilsProvider>
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
-        <KeyboardDatePicker
-          inputVariant="outlined"
-          label="Дата события"
-          format="dd MMM yyyy"
-          value={filter.endDate || null}
-          onChange={_onChangeDateEnd}
-        />
-      </MuiPickersUtilsProvider>
+      <div className={classes.filtersTitle}>Фильтр тепловой карты</div>
+      <div className={classes.filters}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+          <KeyboardDatePicker
+            inputVariant="outlined"
+            label="Дата события"
+            format="dd MMM yyyy"
+            value={filter.startDate || null}
+            onChange={_onChangeDateStart}
+          />
+        </MuiPickersUtilsProvider>
+        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+          <KeyboardDatePicker
+            inputVariant="outlined"
+            label="Дата события"
+            format="dd MMM yyyy"
+            value={filter.endDate || null}
+            onChange={_onChangeDateEnd}
+          />
+        </MuiPickersUtilsProvider>
+      </div>
     </div>
   )
 

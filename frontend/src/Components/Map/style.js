@@ -22,9 +22,17 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
     fontSize: '14px',
     display: 'flex',
+    flexDirection: 'column',
     padding: '10px',
     boxSizing: 'border-box'
   },
+  filtersTitle: {
+    marginBottom: '10px',
+    fontSize: '16px'
+  },
+  filters: {
+    display: 'flex',
+  }
 }));
 
 export default useStyles;
